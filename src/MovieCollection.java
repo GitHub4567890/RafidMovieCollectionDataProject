@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class MovieCollection
@@ -81,7 +83,7 @@ public class MovieCollection
   
   private void searchTitles()
   {
-    System.out.print("Enter a tital search term: ");
+    System.out.print("Enter a title search term: ");
     String searchTerm = scanner.nextLine();
     
     // prevent case sensitivity
@@ -164,12 +166,128 @@ public class MovieCollection
   
   private void searchCast()
   {
-    
+    System.out.print("Enter a cast search term: ");
+    String searchTerm = scanner.nextLine();
+
+    searchTerm = searchTerm.toLowerCase();
+
+    ArrayList<String> castList = new ArrayList<String>();
+    ArrayList<String> fullList = new ArrayList<String>();
+    ArrayList<String> result = new ArrayList<String>();
+
+
+    for (int i = 0; i < movies.size(); i++)
+    {
+      String movieCast = movies.get(i).getCast();
+
+      castList = new ArrayList<String>(Arrays.asList(movieCast.split("\\|")));
+
+      for (int a = 0; a <= castList.size() - 1; a++) {
+        castList.set(a, castList.get(a).toLowerCase());
+      }
+
+      for (int j = 0; j <= castList.size() - 1; j++) {
+        if (!fullList.contains(castList.get(j))) {
+          fullList.add(castList.get(j));
+        }
+      }
+    }
+
+    for (int i = 0; i <= fullList.size() - 1; i++) {
+      if (fullList.get(i).indexOf(searchTerm) != -1) {
+        result.add(fullList.get(i));
+      }
+    }
+
+    Collections.sort(result);
+
+    for (int i = 0; i < result.size(); i++)
+    {
+      String actor = result.get(i);
+      int choiceNum = i + 1;
+      System.out.println("" + choiceNum + ". " + actor);
+    }
+
+    System.out.println("Which cast's movies would you like to learn more about?");
+    System.out.print("Enter number: ");
+
+    int choice = scanner.nextInt();
+    scanner.nextLine();
+
+    String selectedCast = result.get(choice - 1);
+
+    ArrayList<Movie> appearance = new ArrayList<Movie>();
+    for (int i = 0; i <= movies.size() - 1; i++) {
+      if (movies.get(i).getCast().toLowerCase().indexOf(selectedCast) != -1) {
+        appearance.add(movies.get(i));
+      }
+    }
+
+    for (int i = 0; i < appearance.size(); i++)
+    {
+      Movie movie = appearance.get(i);
+      int choiceNum = i + 1;
+      System.out.println("" + choiceNum + ". " + movie);
+    }
+
+    System.out.println("Which movie would you like to learn more about?");
+    System.out.print("Enter number: ");
+
+    int choice2 = scanner.nextInt();
+    scanner.nextLine();
+
+    Movie selectedMovie = appearance.get(choice2 - 1);
+
+    displayMovieInfo(selectedMovie);
+
+    System.out.println("\n ** Press Enter to Return to Main Menu **");
+    scanner.nextLine();
+
   }
 
   private void searchKeywords()
   {
-    
+    System.out.print("Enter a keyword search term: ");
+    String searchTerm = scanner.nextLine();
+
+    searchTerm = searchTerm.toLowerCase();
+
+    ArrayList<Movie> results = new ArrayList<Movie>();
+
+    for (int i = 0; i < movies.size(); i++)
+    {
+      String movieKeyWord = movies.get(i).getKeywords();
+      movieKeyWord = movieKeyWord.toLowerCase();
+
+      if (movieKeyWord.indexOf(searchTerm) != -1)
+      {
+        results.add(movies.get(i));
+      }
+    }
+
+    sortResults(results);
+
+    for (int i = 0; i < results.size(); i++)
+    {
+      String title = results.get(i).getTitle();
+
+      int choiceNum = i + 1;
+
+      System.out.println("" + choiceNum + ". " + title);
+    }
+
+    System.out.println("Which movie would you like to learn more about?");
+    System.out.print("Enter number: ");
+
+    int choice = scanner.nextInt();
+    scanner.nextLine();
+
+    Movie selectedMovie = results.get(choice - 1);
+
+    displayMovieInfo(selectedMovie);
+
+    System.out.println("\n ** Press Enter to Return to Main Menu **");
+    scanner.nextLine();
   }
   
   private void listGenres()
