@@ -10,11 +10,59 @@ public class MovieCollection
 {
   private ArrayList<Movie> movies;
   private Scanner scanner;
+  ArrayList<String> fullGenreList;
+  ArrayList<String> fullCastList;
 
   public MovieCollection(String fileName)
   {
     importMovieList(fileName);
     scanner = new Scanner(System.in);
+
+    // Creating  genreList
+    ArrayList<String> genreList;
+    fullGenreList = new ArrayList<String>();
+
+    for (int i = 0; i < movies.size(); i++)
+    {
+      String movieGenre = movies.get(i).getGenres();
+
+      genreList = new ArrayList<String>(Arrays.asList(movieGenre.split("\\|")));
+
+      for (int a = 0; a <= genreList.size() - 1; a++) {
+        genreList.set(a, genreList.get(a).toLowerCase());
+      }
+
+      for (int j = 0; j <= genreList.size() - 1; j++) {
+        if (!fullGenreList.contains(genreList.get(j))) {
+          fullGenreList.add(genreList.get(j));
+        }
+      }
+    }
+
+    Collections.sort(fullGenreList);
+
+    // Creating full cast list
+
+    ArrayList<String> castList;
+    fullCastList = new ArrayList<String>();
+
+    for (int i = 0; i < movies.size(); i++)
+    {
+      String movieCast = movies.get(i).getCast();
+
+      castList = new ArrayList<String>(Arrays.asList(movieCast.split("\\|")));
+
+      for (int a = 0; a <= castList.size() - 1; a++) {
+        castList.set(a, castList.get(a).toLowerCase());
+      }
+
+      for (int j = 0; j <= castList.size() - 1; j++) {
+        if (!fullCastList.contains(castList.get(j))) {
+          fullCastList.add(castList.get(j));
+        }
+      }
+    }
+
   }
 
   public ArrayList<Movie> getMovies()
@@ -171,31 +219,11 @@ public class MovieCollection
 
     searchTerm = searchTerm.toLowerCase();
 
-    ArrayList<String> castList = new ArrayList<String>();
-    ArrayList<String> fullList = new ArrayList<String>();
     ArrayList<String> result = new ArrayList<String>();
 
-
-    for (int i = 0; i < movies.size(); i++)
-    {
-      String movieCast = movies.get(i).getCast();
-
-      castList = new ArrayList<String>(Arrays.asList(movieCast.split("\\|")));
-
-      for (int a = 0; a <= castList.size() - 1; a++) {
-        castList.set(a, castList.get(a).toLowerCase());
-      }
-
-      for (int j = 0; j <= castList.size() - 1; j++) {
-        if (!fullList.contains(castList.get(j))) {
-          fullList.add(castList.get(j));
-        }
-      }
-    }
-
-    for (int i = 0; i <= fullList.size() - 1; i++) {
-      if (fullList.get(i).indexOf(searchTerm) != -1) {
-        result.add(fullList.get(i));
+    for (int i = 0; i <= fullCastList.size() - 1; i++) {
+      if (fullCastList.get(i).indexOf(searchTerm) != -1) {
+        result.add(fullCastList.get(i));
       }
     }
 
@@ -290,14 +318,57 @@ public class MovieCollection
     scanner.nextLine();
   }
   
-  private void listGenres()
-  {
-  
+  private void listGenres() {
+
+    for (int i = 0; i < fullGenreList.size(); i++)
+    {
+      String genre = fullGenreList.get(i);
+      int choiceNum = i + 1;
+      System.out.println("" + choiceNum + ". " + genre);
+    }
+
+
+    System.out.println("Which genre would you like to see movies in?");
+    System.out.print("Enter number: ");
+
+    int choice = scanner.nextInt();
+    scanner.nextLine();
+
+    String selectedGenre = fullGenreList.get(choice - 1);
+
+    ArrayList<Movie> genreMovies = new ArrayList<Movie>();
+    for (int i = 0; i <= movies.size() - 1; i++) {
+      if (movies.get(i).getGenres().toLowerCase().indexOf(selectedGenre) != -1) {
+        genreMovies.add(movies.get(i));
+      }
+    }
+
+    for (int i = 0; i < genreMovies.size(); i++)
+    {
+      Movie movie = genreMovies.get(i);
+      int choiceNum = i + 1;
+      System.out.println("" + choiceNum + ". " + movie);
+    }
+
+    System.out.println("Which movie would you like to learn more about?");
+    System.out.print("Enter number: ");
+
+    int choice2 = scanner.nextInt();
+    scanner.nextLine();
+
+    Movie selectedMovie = genreMovies.get(choice2 - 1);
+
+    displayMovieInfo(selectedMovie);
+
+    System.out.println("\n ** Press Enter to Return to Main Menu **");
+    scanner.nextLine();
   }
   
-  private void listHighestRated()
-  {
-  
+  private void listHighestRated() {
+    ArrayList<Movie> topRated = new ArrayList<Movie>();
+    for (int i = 0; i <= 49; i++) {
+
+    }
   }
   
   private void listHighestRevenue()
