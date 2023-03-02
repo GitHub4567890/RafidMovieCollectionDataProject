@@ -423,15 +423,15 @@ public class MovieCollection
       }
     }
 
-    ArrayList<Movie> topRatedMovies = new ArrayList<Movie>();
+    ArrayList<Movie> topRevenueMovies = new ArrayList<Movie>();
     for (int i = sortedMoviesRevenue.size() - 1; i >= sortedMoviesRevenue.size() - 50; i--)
     {
-      topRatedMovies.add(sortedMoviesRevenue.get(i));
+      topRevenueMovies.add(sortedMoviesRevenue.get(i));
     }
 
-    for (int i = 0; i <= topRatedMovies.size() - 1; i++)
+    for (int i = 0; i <= topRevenueMovies.size() - 1; i++)
     {
-      Movie movie = topRatedMovies.get(i);
+      Movie movie = topRevenueMovies.get(i);
       int choiceNum = i + 1;
       System.out.println("" + choiceNum + ". " + movie + " Revenue: $" + movie.getRevenue());
     }
@@ -442,7 +442,7 @@ public class MovieCollection
     int choice = scanner.nextInt();
     scanner.nextLine();
 
-    Movie selectedMovie = topRatedMovies.get(choice - 1);
+    Movie selectedMovie = topRevenueMovies.get(choice - 1);
 
     displayMovieInfo(selectedMovie);
 
